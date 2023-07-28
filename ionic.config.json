@@ -1,0 +1,7 @@
+{
+  "name": "goke-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
