@@ -1,7 +1,21 @@
-import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
+import React ,{useRef,useState} from 'react';
+import { IonApp,
+   setupIonicReact ,
+   IonHeader,
+   IonContent,
+   IonToolbar,
+   IonTitle,
+   IonGrid,
+   IonRow,
+   IonCol,
+   IonInput,
+   IonItem,
+   IonLabel,
+   IonCardContent
+   } from '@ionic/react';
+  
+   import BmiControl from './components/BmiControl';
+
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -24,19 +38,80 @@ import './theme/variables.css';
 
 setupIonicReact();
 
-const App: React.FC = () => (
+const App: React.FC = () => {
+  const [calculatedBMI,setCalculatedBMI] = useState<number>();
+
+  const heightInputRef = useRef<HTMLIonInputElement>(null);
+  const weightInputRef = useRef<HTMLIonInputElement>(null);
+
+  const calculateBMI = () => {
+   const enteredWeight = weightInputRef.current!.value;
+   const enteredHeight = heightInputRef.current!.value;
+   
+
+   if(!enteredHeight || !enteredWeight){
+    alert('enter a number')
+    return;
+   }
+
+   const BMI = +enteredWeight / (+enteredHeight * +enteredHeight)
+   setCalculatedBMI(BMI)
+  }
+
+
+  const resetInput = () => {
+   weightInputRef.current!.value = '';
+   heightInputRef.current!.value = '';
+   
+  }
+  return (
   <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
+   <IonHeader>
+      <IonToolbar>
+        <IonTitle>BMI CALCULATOR</IonTitle>
+      </IonToolbar>
+   </IonHeader>
+   <IonContent className='ion-padding'>
+      <IonGrid>
+        <IonRow>
+          <IonCol>
+            <IonItem>
+                <IonLabel position='floating'>Your Height</IonLabel>
+                <IonInput ref={heightInputRef}></IonInput>
+            </IonItem>
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol>
+          <IonItem>
+                <IonLabel position='floating'>Your Weight</IonLabel>
+                <IonInput ref={weightInputRef}></IonInput>
+            </IonItem>
+          </IonCol>
+        </IonRow>
+       
+
+            <IonRow>
+              <IonCol>
+
+              </IonCol>
+            </IonRow>
+
+            <BmiControl onCalculate = {calculateBMI} onReset = {resetInput}/>
+
+           {calculatedBMI && (<IonRow>
+              <IonCol>
+                  <IonCardContent>
+                      <h2>{calculatedBMI.toFixed(2)}</h2>
+                  </IonCardContent>
+              </IonCol>
+            </IonRow>
+            )}
+
+            </IonGrid>
+   </IonContent>
   </IonApp>
-);
+)};
 
 export default App;
+ 
