@@ -3,7 +3,7 @@ import {IonRow,IonCol,IonButton,IonIcon} from '@ionic/react';
 import {calculatorOutline,refreshOutline} from 'ionicons/icons'
 
 const BmiControl: React.FC<{
-    
+
     onCalculate:()=> void; 
     onReset:()=> void;
     }> = props => {
